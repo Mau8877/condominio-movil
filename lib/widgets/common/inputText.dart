@@ -6,6 +6,8 @@ class InputText extends StatefulWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
+  final Function(String)? onChanged;
+  final TextInputType keyboardType;
 
   const InputText({
     super.key,
@@ -14,6 +16,8 @@ class InputText extends StatefulWidget {
     this.obscureText = false,
     this.validator,
     this.controller,
+    this.onChanged,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -33,10 +37,19 @@ class _InputTextState extends State<InputText> {
 
   @override
   Widget build(BuildContext context) {
+    
     return TextField(
       controller: widget.controller,
       obscureText: widget.obscureText,
-      onChanged: _validate,
+      onChanged: (value) {
+        // 1. Ejecuta la validación interna como antes
+        _validate(value);
+
+        // 2. Notifica al widget padre (el formulario) sobre el cambio
+        if (widget.onChanged != null) {
+          widget.onChanged!(value);
+        }
+      },
       decoration: InputDecoration(
         hintText: widget.hintText,
         prefixIcon: Icon(widget.icon),

@@ -76,14 +76,21 @@ class _LoginState extends State<Login> {
                             builder: (context) {
                               return Dialog(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(
+                                    30,
+                                  ), // esquinas redondeadas
                                 ),
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    maxWidth: 350,
-                                    maxHeight: 500,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                    30,
+                                  ), // importante para el contenido
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth: 350,
+                                      maxHeight: 500,
+                                    ),
+                                    child: RegisterForm(),
                                   ),
-                                  child: Registerform(),
                                 ),
                               );
                             },
