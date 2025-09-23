@@ -2,9 +2,9 @@ import 'dart:ffi';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_condominium/adminScreen.dart';
+import 'package:smart_condominium/pages/adminScreen.dart';
 import 'package:smart_condominium/widgets/common/inputText.dart';
-import 'package:smart_condominium/widgets/registerForm.dart';
+import 'package:smart_condominium/widgets/forms/registerForm.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
