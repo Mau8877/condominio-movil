@@ -4,7 +4,7 @@ import 'package:smart_condominium/paletaColores.dart';
 import 'dart:convert';
 
 import 'package:smart_condominium/widgets/common/crudItem.dart';
-import 'package:smart_condominium/widgets/forms/registerForm.dart';
+import 'package:smart_condominium/widgets/forms/copropietarioForm.dart';
 
 class UsuarioCrud extends StatefulWidget {
   const UsuarioCrud({super.key});
@@ -63,7 +63,44 @@ class _UsuarioCrudState extends State<UsuarioCrud> {
         } else if (snapshot.hasError) {
           return Center(child: Text("Error: ${snapshot.error}"));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text("No hay usuarios"));
+          return  Center(child: TextButton(
+              onPressed: () async {
+                final updated = await showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          30,
+                        ), // esquinas redondeadas
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          30,
+                        ), // importante para el contenido
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: 350,
+                            maxHeight: 500,
+                          ),
+                          child: RegisterForm(),
+                        ),
+                      ),
+                    );
+                  },
+                );
+                if (updated == true) {
+                  setState(() {
+                    _usuariosFuture = fetchUsuarios();
+                  });
+                }
+              },
+              style: TextButton.styleFrom(backgroundColor: Colors.blueGrey),
+              child: Text(
+                "Registrar un nuevo Copropietario",
+                style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
+              ),
+            ),);
         }
 
         final usuarios = snapshot.data!;
@@ -102,10 +139,10 @@ class _UsuarioCrudState extends State<UsuarioCrud> {
                   });
                 }
               },
-              style: TextButton.styleFrom(backgroundColor: AppColors.secondary),
+              style: TextButton.styleFrom(backgroundColor: Colors.blueGrey),
               child: Text(
                 "Registrar un nuevo Usuario",
-                style: TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
               ),
             ),
             Expanded(
@@ -113,17 +150,12 @@ class _UsuarioCrudState extends State<UsuarioCrud> {
                 itemCount: usuarios.length,
                 itemBuilder: (context, index) {
                   final usuario = usuarios[index];
-
                   return CrudItem(
-                    title:
+                    mainTitle:
                         usuario["first_name"] + " " + usuario["last_name"] ??
                         "Sin nombre",
-                    subtitle: usuario["tipo"] ?? "Sin correo",
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Ver ${usuario["nombre"]}")),
-                      );
-                    },
+                    subTitle: usuario["ci"],
+                    extraInfo: {"CI": usuario["ci"], "Tel": "789"},
                     onEdit: () async {
                       final updated = await showDialog(
                         context: context,
@@ -147,8 +179,6 @@ class _UsuarioCrudState extends State<UsuarioCrud> {
                           );
                         },
                       );
-
-                      // Si el dialog devolvió true, recarga la lista
                       if (updated == true) {
                         setState(() {
                           _usuariosFuture = fetchUsuarios();

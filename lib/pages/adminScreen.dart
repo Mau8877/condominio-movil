@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smart_condominium/widgets/cruds/usuario_crud.dart';
+import 'package:smart_condominium/widgets/cruds/administrador_crud.dart';
+import 'package:smart_condominium/widgets/cruds/copropietario_crud.dart';
+import 'package:smart_condominium/widgets/cruds/guardia_crud.dart';
+import 'package:smart_condominium/widgets/cruds/residente_crud.dart';
+import 'package:smart_condominium/widgets/cruds/trabajador_crud.dart';
 
 class adminScreen extends StatefulWidget {
   const adminScreen({super.key});
@@ -13,7 +17,10 @@ class _adminScreenState extends State<adminScreen> {
 
   final List<Widget> _pages = [
     UsuarioCrud(),
-    Center(child: Text("Página de Configuración", style: TextStyle(fontSize: 24))),
+    TrabajadorCrud(),
+    GuardiaCrud(),
+    ResidenteCrud(),
+    AdministradorCrud(),
   ];
 
   void _onItemTap(int index) {
@@ -22,6 +29,7 @@ class _adminScreenState extends State<adminScreen> {
     });
     Navigator.pop(context); // cerrar el drawer después de seleccionar
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,12 +48,38 @@ class _adminScreenState extends State<adminScreen> {
             ListTile(
               leading: Icon(Icons.home),
               title: Text("Inicio"),
-              onTap: () => _onItemTap(0)
+              onTap: () => _onItemTap(0),
             ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text("Configuración"),
-              onTap: () => _onItemTap(1)
+            ExpansionTile(
+              leading: const Icon(Icons.people),
+              title: const Text("Gestionar Usuarios"),
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.people_outline),
+                  title: const Text("Gestiones Copropietarios"),
+                  onTap: () => _onItemTap(0),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.work),
+                  title: const Text("Gestionar Trabajadores"),
+                  onTap: () => _onItemTap(1),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.security),
+                  title: const Text("Gestionar Guardias"),
+                  onTap: () => _onItemTap(2),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.home_work_outlined),
+                  title: const Text("Gestionar Residentes"),
+                  onTap: () => _onItemTap(3),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.admin_panel_settings_outlined),
+                  title: const Text("Gestionar Administrador"),
+                  onTap: () => _onItemTap(4),
+                ),
+              ],
             ),
           ],
         ),

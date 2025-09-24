@@ -1,10 +1,15 @@
+import 'dart:convert';
 import 'dart:ffi';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:smart_condominium/pages/adminScreen.dart';
+import 'package:smart_condominium/pages/copropietarioScreen.dart';
+import 'package:smart_condominium/pages/guardiaScreen.dart';
+import 'package:smart_condominium/pages/residenteScreen.dart';
+import 'package:smart_condominium/pages/trabajadorScreen.dart';
 import 'package:smart_condominium/widgets/common/inputText.dart';
-import 'package:smart_condominium/widgets/forms/registerForm.dart';
+import 'package:smart_condominium/widgets/forms/copropietarioForm.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -14,93 +19,157 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final correoController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool _loading = false;
+
+  Future<void> _login() async {
+    setState(() => _loading = true);
+    final url = Uri.parse("http://10.0.2.2:8000/login/"); // tu endpoint real
+    final body = {
+      "ci": correoController.text,
+      "password": passwordController.text,
+    };
+    try {
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Login exitoso")),
+        );
+        print(data);
+        if(data['tipo']=='Copropietario'){
+          Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const CopropietarioScreen()),
+        );
+        }
+        if(data['tipo']=='Administrador'){
+          Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const adminScreen()),
+        );
+        }
+        if(data['tipo']=='Trabajador'){
+          Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const TrabajadorScreen()),
+        );
+        }
+        if(data['tipo']=='Guardia'){
+          Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const GuardiaScreen()),
+        );
+        }
+        if(data['tipo']=='Residente'){
+          Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ResidenteScreen()),
+        );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: ${response.statusCode}")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Excepción: $e")),
+      );
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SizedBox(
-          width: 250,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'lib/assets/images/logo.png',
-                width: 175,
-                color: Colors.blueGrey,
-              ),
-              SizedBox(height: 15),
-              InputText(hintText: "Correo", icon: Icons.person),
-              SizedBox(height: 15),
-              InputText(
-                hintText: "Contraseña",
-                icon: Icons.password,
-                obscureText: true,
-              ),
-              SizedBox(height: 15),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => adminScreen()),
-                  );
-                },
-                style: TextButton.styleFrom(backgroundColor: Colors.blueGrey),
-                child: Text(
-                  "Iniciar Sesion",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              SizedBox(height: 10),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: "¿No tienes una cuenta? ",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                  children: [
-                    TextSpan(
-                      text: "\nRegístrate",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => registerScreen(),
-                          //   ),
-                          // );
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    30,
-                                  ), // esquinas redondeadas
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                    30,
-                                  ), // importante para el contenido
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxWidth: 350,
-                                      maxHeight: 500,
-                                    ),
-                                    child: RegisterForm(),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blueGrey.shade100, Colors.blueGrey.shade200],
+          ),
+        ),
+        child: Center(
+          child: Card(
+            elevation: 8,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(32),
+              width: 300,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'lib/assets/images/logo.png',
+                    width: 120,
+                    color: Colors.blueGrey,
+                  ),
+                  const SizedBox(height: 32),
+                  Text(
+                    'Bienvenido',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey.shade800,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 24),
+                  InputText(
+                    hintText: "Correo",
+                    icon: Icons.person,
+                    controller: correoController,
+                  ),
+                  const SizedBox(height: 16),
+                  InputText(
+                    hintText: "Contraseña",
+                    icon: Icons.password,
+                    obscureText: true,
+                    controller: passwordController,
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 45,
+                    child: ElevatedButton(
+                      onPressed: _loading ? null : _login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueGrey.shade700,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: _loading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : const Text(
+                              "Iniciar Sesión",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

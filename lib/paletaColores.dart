@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   // Colores principales
   static const Color secondary = Color.fromARGB(255, 221, 221, 221); // Azul
-  static const Color primary = Colors.grey; // Azul claro
+  static const Color primary = Colors.blueGrey; // Azul claro
   static const Color accent = Color(0xFFFFC107); // Ámbar
 
   // Colores de estado
