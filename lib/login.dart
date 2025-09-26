@@ -19,7 +19,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final correoController = TextEditingController();
+  final ciController = TextEditingController();
   final passwordController = TextEditingController();
   bool _loading = false;
 
@@ -27,7 +27,7 @@ class _LoginState extends State<Login> {
     setState(() => _loading = true);
     final url = Uri.parse("http://10.0.2.2:8000/login/"); // tu endpoint real
     final body = {
-      "ci": correoController.text,
+      "ci": ciController.text,
       "password": passwordController.text,
     };
     try {
@@ -45,13 +45,13 @@ class _LoginState extends State<Login> {
         if(data['tipo']=='Copropietario'){
           Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const CopropietarioScreen()),
+          MaterialPageRoute(builder: (context) => CopropietarioScreen(ci: data['ci'], nombreUsuario: (data['first_name']+' '+data['last_name']), correo: data['correo'], tipo: data['tipo'])),
         );
         }
         if(data['tipo']=='Administrador'){
           Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const adminScreen()),
+          MaterialPageRoute(builder: (context) => adminScreen(ci: data['ci'], nombreUsuario: data['firts_name']+" "+data['last_name'], correo: data['correo'], tipo: data['tipo'])),
         );
         }
         if(data['tipo']=='Trabajador'){
@@ -125,9 +125,9 @@ class _LoginState extends State<Login> {
                   ),
                   const SizedBox(height: 24),
                   InputText(
-                    hintText: "Correo",
+                    hintText: "CI",
                     icon: Icons.person,
-                    controller: correoController,
+                    controller: ciController,
                   ),
                   const SizedBox(height: 16),
                   InputText(

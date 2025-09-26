@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_condominium/paletaColores.dart';
 import 'package:smart_condominium/widgets/cruds/administrador_crud.dart';
 import 'package:smart_condominium/widgets/cruds/copropietario_crud.dart';
 import 'package:smart_condominium/widgets/cruds/guardia_crud.dart';
@@ -6,7 +7,13 @@ import 'package:smart_condominium/widgets/cruds/residente_crud.dart';
 import 'package:smart_condominium/widgets/cruds/trabajador_crud.dart';
 
 class adminScreen extends StatefulWidget {
-  const adminScreen({super.key});
+  final String nombreUsuario;
+  final String correo;
+  final String ci;
+  final String tipo;
+
+  const adminScreen({super.key, required this.nombreUsuario, required this.correo, required this.ci, required this.tipo});
+
 
   @override
   State<adminScreen> createState() => _adminScreenState();
@@ -14,7 +21,7 @@ class adminScreen extends StatefulWidget {
 
 class _adminScreenState extends State<adminScreen> {
   int _selectedIndex = 0;
-
+  
   final List<Widget> _pages = [
     UsuarioCrud(),
     TrabajadorCrud(),
@@ -38,11 +45,18 @@ class _adminScreenState extends State<adminScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blueGrey),
-              child: Text(
-                "Menú",
-                style: TextStyle(color: Colors.white, fontSize: 24),
+            UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
+                color: AppColors.primary, // Color principal
+              ),
+              accountName: Text(
+                this.widget.nombreUsuario,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              accountEmail: Text(this.widget.correo ?? "Sin correo"),
+              currentAccountPicture: const CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person, size: 40, color: Colors.teal),
               ),
             ),
             ListTile(

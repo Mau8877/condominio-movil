@@ -8,20 +8,16 @@ import 'package:smart_condominium/widgets/forms/copropietarioForm.dart';
 
 class UsuarioCrud extends StatefulWidget {
   const UsuarioCrud({super.key});
-
   @override
   State<UsuarioCrud> createState() => _UsuarioCrudState();
 }
-
 class _UsuarioCrudState extends State<UsuarioCrud> {
   late Future<List<Map<String, dynamic>>> _usuariosFuture;
-
   @override
   void initState() {
     super.initState();
     _usuariosFuture = fetchUsuarios();
   }
-
   /// ====== GET: listar usuarios ======
   Future<List<Map<String, dynamic>>> fetchUsuarios() async {
     final response = await http.get(
@@ -37,13 +33,11 @@ class _UsuarioCrudState extends State<UsuarioCrud> {
       throw Exception("Error al cargar usuarios");
     }
   }
-
   /// ====== DELETE: eliminar usuario ======
   Future<void> eliminarUsuario(int id) async {
     final response = await http.delete(
       Uri.parse("http://10.0.2.2:8000/usuarios/$id/"),
     );
-
     if (response.statusCode == 204) {
       setState(() {
         _usuariosFuture = fetchUsuarios();
@@ -102,9 +96,7 @@ class _UsuarioCrudState extends State<UsuarioCrud> {
               ),
             ),);
         }
-
         final usuarios = snapshot.data!;
-
         return Column(
           children: [
             TextButton(

@@ -1,11 +1,100 @@
 import 'package:flutter/material.dart';
-class CopropietarioScreen extends StatelessWidget {
-  const CopropietarioScreen({super.key});
+import 'package:smart_condominium/paletaColores.dart';
+import 'package:smart_condominium/widgets/cruds/administrador_crud.dart';
+import 'package:smart_condominium/widgets/cruds/copropietario_crud.dart';
+import 'package:smart_condominium/widgets/cruds/guardia_crud.dart';
+import 'package:smart_condominium/widgets/cruds/residente_crud.dart';
+import 'package:smart_condominium/widgets/cruds/trabajador_crud.dart';
+class CopropietarioScreen extends StatefulWidget {
+  final String nombreUsuario;
+  final String correo;
+  final String ci;
+  final String tipo;
+  const CopropietarioScreen({super.key, required this.nombreUsuario, required this.correo, required this.ci, required this.tipo});
 
   @override
+  State<CopropietarioScreen> createState() => _CopropietarioScreenState();
+}
+
+class _CopropietarioScreenState extends State<CopropietarioScreen> {
+  int _selectedIndex = 0;
+  
+  final List<Widget> _pages = [
+    UsuarioCrud(),
+    TrabajadorCrud(),
+    GuardiaCrud(),
+    ResidenteCrud(),
+    AdministradorCrud(),
+  ];
+
+  void _onItemTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    Navigator.pop(context); // cerrar el drawer después de seleccionar
+  }
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      
+    return Scaffold(
+      appBar: AppBar(title: Text("Admin Screen")),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
+                color: AppColors.primary, // Color principal
+              ),
+              accountName: Text(
+                this.widget.nombreUsuario,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              accountEmail: Text(this.widget.correo ?? "Sin correo"),
+              currentAccountPicture: const CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person, size: 40, color: Colors.teal),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text("Inicio"),
+              onTap: () => _onItemTap(0),
+            ),
+            ExpansionTile(
+              leading: const Icon(Icons.people),
+              title: const Text("Gestionar Usuarios"),
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.people_outline),
+                  title: const Text("Gestiones Copropietarios"),
+                  onTap: () => _onItemTap(0),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.work),
+                  title: const Text("Gestionar Trabajadores"),
+                  onTap: () => _onItemTap(1),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.security),
+                  title: const Text("Gestionar Guardias"),
+                  onTap: () => _onItemTap(2),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.home_work_outlined),
+                  title: const Text("Gestionar Residentes"),
+                  onTap: () => _onItemTap(3),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.admin_panel_settings_outlined),
+                  title: const Text("Gestionar Administrador"),
+                  onTap: () => _onItemTap(4),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      body: _pages[_selectedIndex],
     );
   }
-}
+  }
