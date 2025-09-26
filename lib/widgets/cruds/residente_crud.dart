@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_condominium/paletaColores.dart';
 import 'dart:convert';
 
 import 'package:smart_condominium/widgets/common/crudItem.dart';
-import 'package:smart_condominium/widgets/forms/copropietarioForm.dart';
 import 'package:smart_condominium/widgets/forms/residenteForm.dart';
 
 class ResidenteCrud extends StatefulWidget {
@@ -178,7 +176,7 @@ class _ResidenteCrudState extends State<ResidenteCrud> {
                                   maxWidth: 350,
                                   maxHeight: 500,
                                 ),
-                                child: RegisterForm(
+                                child: ResidenteForm(
                                   idUsuario: usuario['id'].toString(),
                                 ),
                               ),

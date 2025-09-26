@@ -192,11 +192,6 @@ class _AdministradorFormState extends State<AdministradorForm> {
               controller: lastNameController,
             ),
             SizedBox(height: 20),
-            // InputChoiceSingle(
-            //   title: 'Rol',
-            //   opciones: ["Copropietario", "Administrador", "Invitado"],
-            //   onChanged: (value) => setState(() => tipo = value),
-            // ),
             SizedBox(height: 20),
             InputText(
               hintText: 'Telefono',

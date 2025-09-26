@@ -19,52 +19,118 @@ class CrudItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Puedes personalizar la paleta aquí si tienes una paleta propia
+    final Color primaryColor = Theme.of(context).colorScheme.primary;
+    final Color cardBg = const Color.fromARGB(255, 231, 231, 231);
+    final Color iconEdit = primaryColor;
+    final Color iconDelete = Colors.redAccent;
+    final Color titleColor = Colors.black87;
+
     return Card(
-      color: const Color.fromARGB(207, 245, 245, 245),
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      elevation: 3,
-      child: ExpansionTile(
-        backgroundColor: const Color.fromARGB(0, 245, 245, 245),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title: Text(
-          mainTitle,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: subTitle != null ? Text(subTitle!) : null,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+      color: cardBg,
+      margin: const EdgeInsets.symmetric(vertical: 9, horizontal: 18),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(color: primaryColor.withOpacity(0.08), width: 2),
+      ),
+      elevation: 10,
+      shadowColor: primaryColor.withOpacity(0.30),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(18),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          collapsedIconColor: primaryColor,
+          iconColor: primaryColor,
+          backgroundColor: cardBg,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+          title: Text(
+            mainTitle,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              color: titleColor,
+              letterSpacing: 0.2,
+            ),
+          ),
+          leading: Icon(Icons.person, size: 40,color: AppColors.primary,),
+          subtitle: subTitle != null
+              ? Text(
+                  subTitle!,
+                  style: const TextStyle(
+                      color: Colors.black54,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400),
+                )
+              : null,
+          trailing: Container(
+            margin: const EdgeInsets.only(left: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Tooltip(
+                  message: "Editar",
+                  child: IconButton(
+                    icon: Icon(Icons.edit_rounded, color: iconEdit, size: 24),
+                    onPressed: onEdit,
+                  ),
+                ),
+                const SizedBox(width: 2),
+                Tooltip(
+                  message: "Eliminar",
+                  child: IconButton(
+                    icon: Icon(Icons.delete_outline_rounded, color: iconDelete, size: 24),
+                    onPressed: onDelete,
+                  ),
+                ),
+              ],
+            ),
+          ),
           children: [
-            IconButton(
-              icon: const Icon(Icons.edit, color: Colors.blueGrey),
-              onPressed: onEdit,
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: onDelete,
-            ),
+            if (extraInfo != null)
+              Container(
+                decoration: BoxDecoration(
+                  color: primaryColor.withOpacity(0.04),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(18),
+                    bottomRight: Radius.circular(18),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: extraInfo!.entries.map((e) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${e.key}: ",
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              e.value,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
           ],
         ),
-        children: [
-          if (extraInfo != null)
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.stretch, // 👈 Alineación izquierda
-                children: extraInfo!.entries.map((e) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Text(
-                      "${e.key}: ${e.value}",
-                      textAlign: TextAlign
-                          .left, style: TextStyle(color: Colors.black45),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-        ],
       ),
     );
   }

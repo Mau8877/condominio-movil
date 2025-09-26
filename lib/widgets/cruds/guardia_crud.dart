@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_condominium/paletaColores.dart';
 import 'dart:convert';
 
 import 'package:smart_condominium/widgets/common/crudItem.dart';

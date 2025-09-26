@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:smart_condominium/pages/adminScreen.dart';
@@ -9,7 +7,6 @@ import 'package:smart_condominium/pages/guardiaScreen.dart';
 import 'package:smart_condominium/pages/residenteScreen.dart';
 import 'package:smart_condominium/pages/trabajadorScreen.dart';
 import 'package:smart_condominium/widgets/common/inputText.dart';
-import 'package:smart_condominium/widgets/forms/copropietarioForm.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -51,7 +48,7 @@ class _LoginState extends State<Login> {
         if(data['tipo']=='Administrador'){
           Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => adminScreen(ci: data['ci'], nombreUsuario: data['firts_name']+" "+data['last_name'], correo: data['correo'], tipo: data['tipo'])),
+          MaterialPageRoute(builder: (context) => adminScreen(ci: data['ci'], nombreUsuario: (data['first_name'])+" "+(data['last_name']), correo: data['correo'], tipo: data['tipo'])),
         );
         }
         if(data['tipo']=='Trabajador'){

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_condominium/paletaColores.dart';
 import 'dart:convert';
 
 import 'package:smart_condominium/widgets/common/crudItem.dart';
 import 'package:smart_condominium/widgets/forms/administradorForm.dart';
-import 'package:smart_condominium/widgets/forms/copropietarioForm.dart';
 
 class AdministradorCrud extends StatefulWidget {
   const AdministradorCrud({super.key});
@@ -177,7 +175,7 @@ class _AdministradorCrudState extends State<AdministradorCrud> {
                                   maxWidth: 350,
                                   maxHeight: 500,
                                 ),
-                                child: RegisterForm(
+                                child: AdministradorForm(
                                   idUsuario: usuario['id'].toString(),
                                 ),
                               ),

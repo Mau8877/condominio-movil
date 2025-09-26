@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_condominium/paletaColores.dart';
+import 'package:smart_condominium/widgets/bitacora.dart';
 import 'package:smart_condominium/widgets/cruds/administrador_crud.dart';
 import 'package:smart_condominium/widgets/cruds/copropietario_crud.dart';
 import 'package:smart_condominium/widgets/cruds/guardia_crud.dart';
@@ -12,8 +13,13 @@ class adminScreen extends StatefulWidget {
   final String ci;
   final String tipo;
 
-  const adminScreen({super.key, required this.nombreUsuario, required this.correo, required this.ci, required this.tipo});
-
+  const adminScreen({
+    super.key,
+    required this.nombreUsuario,
+    required this.correo,
+    required this.ci,
+    required this.tipo,
+  });
 
   @override
   State<adminScreen> createState() => _adminScreenState();
@@ -21,13 +27,14 @@ class adminScreen extends StatefulWidget {
 
 class _adminScreenState extends State<adminScreen> {
   int _selectedIndex = 0;
-  
+
   final List<Widget> _pages = [
     UsuarioCrud(),
     TrabajadorCrud(),
     GuardiaCrud(),
     ResidenteCrud(),
     AdministradorCrud(),
+    Bitacora(),
   ];
 
   void _onItemTap(int index) {
@@ -50,13 +57,13 @@ class _adminScreenState extends State<adminScreen> {
                 color: AppColors.primary, // Color principal
               ),
               accountName: Text(
-                this.widget.nombreUsuario,
+                widget.nombreUsuario,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
-              accountEmail: Text(this.widget.correo ?? "Sin correo"),
+              accountEmail: Text(widget.correo ?? "Sin correo"),
               currentAccountPicture: const CircleAvatar(
                 backgroundColor: Colors.white,
-                child: Icon(Icons.person, size: 40, color: Colors.teal),
+                child: Icon(Icons.person, size: 40, color: AppColors.primary),
               ),
             ),
             ListTile(
@@ -92,6 +99,17 @@ class _adminScreenState extends State<adminScreen> {
                   leading: const Icon(Icons.admin_panel_settings_outlined),
                   title: const Text("Gestionar Administrador"),
                   onTap: () => _onItemTap(4),
+                ),
+              ],
+            ),
+            ExpansionTile(
+              leading: const Icon(Icons.money),
+              title: Text("Finanzas y Administración"),
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.history_sharp),
+                  title: const Text("Gestionar Bitacora"),
+                  onTap: () => _onItemTap(5),
                 ),
               ],
             ),

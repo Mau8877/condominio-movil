@@ -46,10 +46,10 @@ class _CopropietarioScreenState extends State<CopropietarioScreen> {
                 color: AppColors.primary, // Color principal
               ),
               accountName: Text(
-                this.widget.nombreUsuario,
+                widget.nombreUsuario,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
-              accountEmail: Text(this.widget.correo ?? "Sin correo"),
+              accountEmail: Text(widget.correo ?? "Sin correo"),
               currentAccountPicture: const CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Icon(Icons.person, size: 40, color: Colors.teal),
